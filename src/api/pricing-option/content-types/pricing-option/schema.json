@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pricing_options",
+  "info": {
+    "singularName": "pricing-option",
+    "pluralName": "pricing-options",
+    "displayName": "pricingOption"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "displayName": {
+      "type": "string"
+    },
+    "uidName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "pricesufix": {
+      "type": "string"
+    },
+    "isFeatured": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "text"
+    },
+    "features": {
+      "type": "blocks"
+    },
+    "sort": {
+      "type": "integer"
+    }
+  }
+}

@@ -9,7 +9,7 @@
     "deploy": "strapi deploy",
     "dev": "strapi develop",
     "develop": "strapi develop",
-    "start": "strapi start"       
+    "start": "strapi start",     
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
     "upgrade:dry": "npx @strapi/upgrade latest --dry"
@@ -31,7 +31,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": "20.x"
+    "node": "20.x",
     "npm": ">=6.0.0"
   },
   "strapi": {

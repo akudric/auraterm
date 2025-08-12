@@ -1,16 +1,15 @@
-// Strapi v5: use ESM default export
 export default {
   routes: [
     {
       method: "POST",
-      path: "/contact",
+      path: "/contact-submit",         // ← use a unique path
       handler: "contact.submit",
       config: { auth: false },
     },
-    // (Optional) quick browser check:
+    // optional GET so you can check in a browser
     {
       method: "GET",
-      path: "/contact",
+      path: "/contact-submit",
       handler: "contact.health",
       config: { auth: false },
     },

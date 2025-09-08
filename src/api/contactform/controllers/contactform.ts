@@ -1,7 +1,6 @@
 export default {
   async submit(ctx: any) {
     try {
-      // Accept raw or { data: ... }
       const raw = ctx.request.body || {};
       const body = raw && raw.data && typeof raw.data === 'object' ? raw.data : raw;
 
@@ -9,15 +8,11 @@ export default {
       strapi.log.info(`[contactform.submit HIT] raw body: ${JSON.stringify(ctx.request.body)}`);
       strapi.log.info(`[contactform.submit HIT] body: ${JSON.stringify(body)}`);
 
-      // Honeypot
       if (body.company_website) {
         return ctx.send({ ok: true, spam: true }, 200);
       }
 
-      // Required
-      const missing = ['name', 'email', 'message'].filter(
-        (k) => !String(body?.[k] || '').trim()
-      );
+      const missing = ['name', 'email', 'message'].filter((k) => !String(body?.[k] || '').trim());
       if (missing.length) {
         return ctx.send({ ok: false, message: `Missing: ${missing.join(', ')}` }, 400);
       }
@@ -28,12 +23,9 @@ export default {
           ? `[Quote][Specific] ${body.option || body.system_type || '-'} — ${body.name}`
           : `[Quote][General] ${body.name}`;
 
-      const ua = ctx.request.header['user-agent'] || '-';
-      const xff = ctx.request.header['x-forwarded-for'] || '';
-      const ip =
-        (Array.isArray(xff) ? xff[0] : xff).split(',')[0]?.trim() ||
-        ctx.request.ip ||
-        '-';
+      const ua = ctx.request.headers?.['user-agent'] || '-';
+      const xff = ctx.request.headers?.['x-forwarded-for'] || '';
+      const ip = (Array.isArray(xff) ? xff[0] : xff).split(',')[0]?.trim() || ctx.request.ip || '-';
 
       const html = `
         <p>New ${kind.toUpperCase()} inquiry</p>
@@ -60,49 +52,42 @@ export default {
       const from = process.env.EMAIL_FROM || 'requests@auraterm.hr';
       const replyTo = body.email;
 
+      // ✅ NEW: log which provider is active + basic options
+      const emailCfg = strapi.config.get('plugin.email', {});
+      const providerName = strapi.config.get('plugin.email.config.provider', 'unknown');
+      strapi.log.info(`[email] provider=${providerName}`);      strapi.log.info(`[email] provider=${providerName}`);
       strapi.log.info(`[contactform.submit] Email details - To: ${to}, From: ${from}, ReplyTo: ${replyTo}`);
       strapi.log.info(`[contactform.submit] Email Subject: ${subject}`);
-      strapi.log.info(`[contactform.submit] Email HTML (first 200 chars): ${html.substring(0, 200)}`);
-      await strapi.plugin('email').service('email').send({
-        to,
-        from,
-        replyTo,
-        subject,
-        html,
-      });
+      strapi.log.info(`[contactform.submit] Email HTML length: ${html.length}`);
+
+      await strapi.plugin('email').service('email').send({ to, from, replyTo, subject, html });
 
       return ctx.send({ ok: true, used: 'contactform.submit' }, 200);
-      } catch (e: any) {
-      // Nodemailer and provider errors often carry extra info
-      const errorInfo = {
-        name: e?.name,
+    } catch (e: any) {
+      // ✅ NEW: show HTTP provider data (422 reasons) and SMTP specifics
+      const status = e?.status ?? e?.response?.status;
+      const data = e?.response?.data ?? e?.data ?? e?.response; // covers axios & others
+      const info = {
         message: e?.message,
-        stack: e?.stack,
+        status,
+        responseCode: e?.responseCode,
         code: e?.code,
         command: e?.command,
-        response: e?.response,         // SMTP / API server reply
-        responseCode: e?.responseCode, // numeric SMTP code
-        status: e?.status,             // HTTP status from API-based providers
-        data: e?.data,                 // provider error body (e.g. SendGrid, Resend)
+        data,
       };
+      try { strapi.log.error('[contactform.submit] error ' + JSON.stringify(info)); }
+      catch { strapi.log.error('[contactform.submit] error (stringified failed): ' + String(e)); }
 
-      strapi.log.error('contactform.submit error', errorInfo);
-
-      // You can even surface some of this to the client in dev mode only
-      const isDev = process.env.NODE_ENV !== 'production';
-      return ctx.send(
-        {
-          ok: false,
-          message: 'Email send failed',
-          ...(isDev ? { debug: errorInfo } : {}), // remove in prod
-        },
-        500
-      );
+      // Keep response minimal; return 422 if provider said so
+      return ctx.send({ ok: false, message: 'Email send failed' }, status === 422 ? 422 : 500);
     }
   },
 
   async health(ctx: any) {
     strapi.log.info('[contactform.health HIT]');
-    ctx.send({ ok: false, message: 'This is the health endpoint. Please use /api/contactform/submit to submit the form.' }, 405);
+    ctx.send(
+      { ok: false, message: 'This is the health endpoint. Please use /api/contactform/submit to submit the form.' },
+      405
+    );
   },
 };

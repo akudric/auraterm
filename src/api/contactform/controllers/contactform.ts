@@ -60,7 +60,9 @@ export default {
       const from = process.env.EMAIL_FROM || 'requests@auraterm.hr';
       const replyTo = body.email;
 
-      strapi.log.info(`Sending email to: ${to} from: ${from} replyTo: ${replyTo}`);
+      strapi.log.info(`[contactform.submit] Email details - To: ${to}, From: ${from}, ReplyTo: ${replyTo}`);
+      strapi.log.info(`[contactform.submit] Email Subject: ${subject}`);
+      strapi.log.info(`[contactform.submit] Email HTML (first 200 chars): ${html.substring(0, 200)}`);
       await strapi.plugin('email').service('email').send({
         to,
         from,

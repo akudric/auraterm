@@ -70,9 +70,32 @@ export default {
       });
 
       return ctx.send({ ok: true, used: 'contactform.submit' }, 200);
-    } catch (e) {
-      strapi.log.error(`contactform.submit error: ${e?.message || e}`);
-      return ctx.send({ ok: false, message: 'Email send failed' }, 500);
+      } catch (e: any) {
+      // Nodemailer and provider errors often carry extra info
+      const errorInfo = {
+        name: e?.name,
+        message: e?.message,
+        stack: e?.stack,
+        code: e?.code,
+        command: e?.command,
+        response: e?.response,         // SMTP / API server reply
+        responseCode: e?.responseCode, // numeric SMTP code
+        status: e?.status,             // HTTP status from API-based providers
+        data: e?.data,                 // provider error body (e.g. SendGrid, Resend)
+      };
+
+      strapi.log.error('contactform.submit error', errorInfo);
+
+      // You can even surface some of this to the client in dev mode only
+      const isDev = process.env.NODE_ENV !== 'production';
+      return ctx.send(
+        {
+          ok: false,
+          message: 'Email send failed',
+          ...(isDev ? { debug: errorInfo } : {}), // remove in prod
+        },
+        500
+      );
     }
   },
 

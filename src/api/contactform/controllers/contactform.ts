@@ -48,7 +48,24 @@ export default {
         <p>IP: ${ip}</p>
       `;
 
-      const to = process.env.CONTACT_TO || 'requests@auraterm.hr';
+      const text = `New ${kind.toUpperCase()} inquiry
+
+      Name: ${body.name}
+      Email: ${body.email}
+      Phone: ${body.phone || '-'}
+      System type: ${body.system_type || '-'}
+      ${kind === 'specific' ? `Option: ${body.option || '-'}` : ''}
+      Location: ${body.location || '-'}
+      Page: ${body.pagePath || '-'}
+      Client sent at: ${body.clientSentAt || '-'}
+      Server received at: ${new Date().toISOString()}
+
+      Message:
+      ${body.message}
+
+      UA: ${ua}
+      IP: ${ip}
+      `;      const to = process.env.CONTACT_TO || 'requests@auraterm.hr';
       const from = process.env.EMAIL_FROM || 'requests@auraterm.hr';
       const replyTo = body.email;
 
@@ -60,7 +77,7 @@ export default {
       strapi.log.info(`[contactform.submit] Email Subject: ${subject}`);
       strapi.log.info(`[contactform.submit] Email HTML length: ${html.length}`);
 
-      await strapi.plugin('email').service('email').send({ to, from, replyTo, subject, html });
+      await strapi.plugin('email').service('email').send({ to, from, replyTo, subject, text, html });
 
       return ctx.send({ ok: true, used: 'contactform.submit' }, 200);
     } catch (e: any) {

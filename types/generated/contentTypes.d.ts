@@ -373,6 +373,38 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAdditionalOptionAdditionalOption
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'additional_options';
+  info: {
+    displayName: 'additionalOption';
+    pluralName: 'additional-options';
+    singularName: 'additional-option';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    cijena: Schema.Attribute.Decimal;
+    cijenaDO: Schema.Attribute.Decimal;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ImeUsluge: Schema.Attribute.String;
+    Jedinica: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::additional-option.additional-option'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiOurReviewOurReview extends Struct.CollectionTypeSchema {
   collectionName: 'our_reviews';
   info: {
@@ -406,6 +438,43 @@ export interface ApiOurReviewOurReview extends Struct.CollectionTypeSchema {
         },
         number
       >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPricingOptionMultiSplitPricingOptionMultiSplit
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'pricing_option_multi_splits';
+  info: {
+    displayName: 'pricingOptionMultiSplit';
+    pluralName: 'pricing-option-multi-splits';
+    singularName: 'pricing-option-multi-split';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    description: Schema.Attribute.String;
+    displayName: Schema.Attribute.String;
+    features: Schema.Attribute.Blocks;
+    isFeatured: Schema.Attribute.Boolean;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::pricing-option-multi-split.pricing-option-multi-split'
+    > &
+      Schema.Attribute.Private;
+    note: Schema.Attribute.Text;
+    price: Schema.Attribute.Decimal;
+    pricesufix: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    sort: Schema.Attribute.Integer;
+    uidName: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -997,7 +1066,9 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::additional-option.additional-option': ApiAdditionalOptionAdditionalOption;
       'api::our-review.our-review': ApiOurReviewOurReview;
+      'api::pricing-option-multi-split.pricing-option-multi-split': ApiPricingOptionMultiSplitPricingOptionMultiSplit;
       'api::pricing-option.pricing-option': ApiPricingOptionPricingOption;
       'api::testimonial.testimonial': ApiTestimonialTestimonial;
       'plugin::content-releases.release': PluginContentReleasesRelease;

@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "additional_options",
+  "info": {
+    "singularName": "additional-option",
+    "pluralName": "additional-options",
+    "displayName": "additionalOption"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ImeUsluge": {
+      "type": "string"
+    },
+    "Jedinica": {
+      "type": "string"
+    },
+    "cijena": {
+      "type": "decimal"
+    },
+    "cijenaDO": {
+      "type": "decimal"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pricing_option_multi_splits",
+  "info": {
+    "singularName": "pricing-option-multi-split",
+    "pluralName": "pricing-option-multi-splits",
+    "displayName": "pricingOptionMultiSplit"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "displayName": {
+      "type": "string"
+    },
+    "uidName": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "pricesufix": {
+      "type": "string"
+    },
+    "isFeatured": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "text"
+    },
+    "features": {
+      "type": "blocks"
+    },
+    "sort": {
+      "type": "integer"
+    }
+  }
+}

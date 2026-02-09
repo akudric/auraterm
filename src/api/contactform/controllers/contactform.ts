@@ -65,8 +65,8 @@ export default {
 
       UA: ${ua}
       IP: ${ip}
-      `;      const to = process.env.CONTACT_TO || 'requests@auraterm.hr';
-      const from = process.env.EMAIL_FROM || 'requests@auraterm.hr';
+      `;      const to = process.env.CONTACT_TO || 'info@auraterm.hr';
+      const from = process.env.EMAIL_FROM || 'info@auraterm.hr';
       const replyTo = body.email;
 
       // ✅ NEW: log which provider is active + basic options

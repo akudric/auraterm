@@ -34,8 +34,8 @@ export default {
           `<p><strong>Poruka:</strong></p><p>${String(message).replace(/\n/g, "<br>")}</p>`;
 
         await strapi.plugin("email").service("email").send({
-          to: process.env.CONTACT_TO || "requests@auraterm.hr",
-          from: process.env.EMAIL_FROM || "requests@auraterm.hr",
+          to: process.env.CONTACT_TO || "info@auraterm.hr",
+          from: process.env.EMAIL_FROM || "info@auraterm.hr",
           replyTo: email,
           subject: `Novi upit — ${name}`,
           text: `Ime: ${name}\nEmail: ${email}\n${phone ? `Mobitel: ${phone}\n` : ""}Poruka:\n${message}`,

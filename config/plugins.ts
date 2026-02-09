@@ -7,7 +7,7 @@ export default ({ env }) => ({
         port: env.int("SMTP_PORT", 465),
         secure: env.bool("SMTP_SECURE", true),
         auth: {
-          user: env("SMTP_USER", "requests@auraterm.hr"),
+          user: env("SMTP_USER", "info@auraterm.hr"),
           pass: env("SMTP_PASS"),
         },
         tls: {
@@ -16,8 +16,8 @@ export default ({ env }) => ({
         },
       },
       settings: {
-        defaultFrom: env("EMAIL_FROM", "requests@auraterm.hr"),
-        defaultReplyTo: env("EMAIL_REPLY_TO", "requests@auraterm.hr"),
+        defaultFrom: env("EMAIL_FROM", "info@auraterm.hr"),
+        defaultReplyTo: env("EMAIL_REPLY_TO", "info@auraterm.hr"),
       },
     },
   },
